@@ -33,10 +33,9 @@ const utils = {
 
   getTimestamp: () => `<t:${Math.floor(new Date().getTime() / 1000)}>`,
 
-  formatPlayers: (players) => {
-    const formatter = new Intl.ListFormat('en', { style: 'long', type: 'conjunction' });
-    return formatter.format(Object.keys(players)
-      .sort((playerA, playerB) => playerA.toLowerCase().localeCompare(playerB.toLowerCase())));
+  sortPlayers: (players) => {
+    return Object.keys(players)
+        .sort((playerA, playerB) => playerA.toLowerCase().localeCompare(playerB.toLowerCase()));
   },
 
   formatMinutes: (minutes) => {

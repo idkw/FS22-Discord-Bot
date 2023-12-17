@@ -14,7 +14,7 @@ require('dotenv-flow').config({
 const {
   getDefaultDatabase,
   formatMinutes,
-  formatPlayers,
+  sortPlayers,
   getTimestamp,
   getDataFromAPI,
   parseData,
@@ -88,26 +88,6 @@ const getUpdateString = (
     string += modString;
   }
 
-  const { money, playTime } = newData.careerSavegame;
-  if (previousCareerSavegame.money !== money) {
-    let directionEmoji = '';
-    let moneyDifferenceSign = '';
-    const moneyDifferenceAbsolute = Math.abs(money - previousCareerSavegame.money);
-
-    if (money > previousCareerSavegame.money) {
-      directionEmoji = ':arrow_up_small:';
-      moneyDifferenceSign = '+';
-    }
-    if (money < previousCareerSavegame.money) {
-      directionEmoji = ':arrow_down_small:';
-      moneyDifferenceSign = '-';
-    }
-    string += `:moneybag: Savegame Money: ${directionEmoji} **${money.toLocaleString('en-GB')}** (${moneyDifferenceSign}${moneyDifferenceAbsolute.toLocaleString('en-GB')}).\n`;
-  }
-  if (previousCareerSavegame.playTime !== playTime) {
-    string += `:watch: Savegame Play Time: **${formatMinutes(playTime)}**.\n`;
-  }
-
   const { numUsed, capacity, players } = newData.slots;
   if (!_.isEqual(previousPlayers, players)) {
     const newPlayersArray = [];
@@ -134,19 +114,21 @@ const getUpdateString = (
     const leftPlayers = leftPlayersArray
       .reduce((obj, player) => Object.assign(obj, { [player.name]: player }), {});
 
-    if (Object.keys(newPlayers).length > 0 || Object.keys(leftPlayers).length > 0) {
-      string += `:farmer: **${numUsed}** of ${capacity} players online${(numUsed > 0 ? `: **${formatPlayers(players)}**` : '')} (${getTimestamp()}).\n`;
-    }
-
-    if (Object.keys(newPlayers).length > 0) {
-      console.log(newPlayers);
-      string += `    :arrow_right: **${formatPlayers(newPlayers)}** just joined the server.\n`;
-    }
+    Object.values(newPlayers).forEach(({ name: playerName }) => {
+      string += `    :arrow_right: **${playerName}** joined\n`;
+    });
 
     Object.values(leftPlayers).forEach(({ name: playerName, firstSeen }) => {
       const playTimeInMinutes = Math.round((new Date().getTime() - firstSeen) / 60000);
-      string += `    :arrow_left: **${playerName}** just left the server after playing for **${formatMinutes(playTimeInMinutes)}**.\n`;
+      string += `    :arrow_left: **${playerName}** left (play time: ${formatMinutes(playTimeInMinutes)})\n`;
     });
+
+    // if (Object.keys(newPlayers).length > 0 || Object.keys(leftPlayers).length > 0) {
+    //   string += `**[${numUsed}/${capacity}]** players online:\n`;
+    //   Object.values(sortPlayers(players)).forEach(({ name: playerName}) => {
+    //     string += `- **${playerName}**\n`;
+    //   });
+    // }
   }
 
   return string.trim() || null;
