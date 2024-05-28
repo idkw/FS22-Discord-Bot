@@ -190,6 +190,7 @@ const update = () => {
             previousPlayers,
             previousCareerSavegame,
           );
+          console.log("updateString: " + updateString)
           sendMessage(updateString);
           db = data;
         } else {
