@@ -80,7 +80,7 @@ const utils = {
     })),
 
   parseData: ({ serverStats, careerSavegame: savegame }, previousPlayers, previousServer) => {
-    if (!serverStats || !serverStats?.Server?._attributes || !savegame) {
+    if (!serverStats || !serverStats?.Server?._attributes) {
       return null;
     }
 
