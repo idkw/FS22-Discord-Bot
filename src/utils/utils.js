@@ -126,8 +126,8 @@ const utils = {
     };
 
     const careerSavegame = {
-      money: parseInt(savegame.careerSavegame.statistics.money._text || 0, 10),
-      playTime: parseInt(savegame.careerSavegame.statistics.playTime._text || 0, 10),
+      money: 0,
+      playTime: 0,
     };
 
     return {
