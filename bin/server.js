@@ -173,9 +173,7 @@ const update = () => {
         const previousPlayers = db.slots.players;
         const previousCareerSavegame = db.careerSavegame;
 
-        console.log("rawData: " + JSON.stringify(rawData))
         const data = parseData(rawData, previousPlayers, previousServer);
-        console.log("data: " + JSON.stringify(data))
 
         if (previouslyUnreachable) {
           if (process.env.FS22_BOT_DISABLE_UNREACHABLE_FOUND_MESSAGES !== 'true') {
@@ -192,7 +190,6 @@ const update = () => {
             previousPlayers,
             previousCareerSavegame,
           );
-          console.log("updateString: " + updateString)
           sendMessage(updateString);
           db = data;
         } else {
