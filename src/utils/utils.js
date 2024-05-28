@@ -127,7 +127,7 @@ const utils = {
 
     const careerSavegame = {
       money: 0,
-      playTime: 0,
+      playTime: new Date().getTime(),
     };
 
     return {
